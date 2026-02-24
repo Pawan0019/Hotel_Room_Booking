@@ -1,0 +1,175 @@
+@model IEnumerable<HotelBooking.Web.ViewModels.GuestListViewModel>
+
+@{
+    ViewData["Title"] = "Guests";
+}
+
+<style>
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+    }
+    .modern-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        background: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    .toolbar-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1.5rem;
+        background: #fff;
+        border-bottom: 1px solid #eee;
+    }
+    .table-container {
+        padding: 0;
+    }
+    .table thead th {
+        background: #f8f9fa;
+        color: #495057;
+        font-weight: 600;
+        border-bottom: 2px solid #e9ecef;
+        padding: 1rem;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+    .table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        color: #212529;
+        border-bottom: 1px solid #f1f3f5;
+    }
+    .table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    .table tbody tr:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.001);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .status-badge {
+        padding: 0.35em 0.8em;
+        border-radius: 50rem;
+        font-size: 0.75em;
+        font-weight: 600;
+    }
+    .status-active {
+        background-color: #d1e7dd;
+        color: #0f5132;
+    }
+    .status-inactive {
+        background-color: #f8d7da;
+        color: #842029;
+    }
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        color: #6c757d;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+    .action-btn:hover {
+        background-color: #e9ecef;
+        color: var(--primary-color);
+    }
+    .action-btn.delete:hover {
+        background-color: #fee2e2;
+        color: #dc3545;
+    }
+</style>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2 page-header mb-0">Manage Guests</h1>
+            <p class="text-muted small mb-0">Overview and management of guest profiles</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Create New Guest
+        </a>
+    </div>
+
+    <div class="modern-card">
+        <!-- Table -->
+        <div class="table-responsive table-container">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">@Html.DisplayNameFor(model => model.Name)</th>
+                        <th>@Html.DisplayNameFor(model => model.Email)</th>
+                        <th>@Html.DisplayNameFor(model => model.Phone)</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-bold text-primary">
+                                <i class="fas fa-user me-2"></i>@Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Phone)</td>
+                            <td>
+                                @if (item.IsActive)
+                                {
+                                    <span class="status-badge status-active">
+                                        <i class="fas fa-check-circle me-1"></i>Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge status-inactive">
+                                        <i class="fas fa-times-circle me-1"></i>Inactive
+                                    </span>
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                <a asp-action="Edit" asp-route-id="@item.GuestId" class="action-btn" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.GuestId" class="action-btn" title="Details">
+                                    <i class="fas fa-info-circle"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.GuestId" class="action-btn delete" title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                                @if (item.IsActive)
+                                {
+                                    <form asp-action="Deactivate" asp-route-id="@item.GuestId" method="post" style="display:inline;">
+                                        <button type="submit" class="btn btn-link action-btn" title="Deactivate" style="border:none; background:none;">
+                                            <i class="fas fa-user-slash"></i>
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form asp-action="Activate" asp-route-id="@item.GuestId" method="post" style="display:inline;">
+                                        <button type="submit" class="btn btn-link action-btn" title="Activate" style="border:none; background:none; color:#10B981;">
+                                            <i class="fas fa-user-check"></i>
+                                        </button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

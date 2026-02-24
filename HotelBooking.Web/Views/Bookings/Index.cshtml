@@ -1,0 +1,243 @@
+@model IEnumerable<HotelBooking.Web.ViewModels.BookingListViewModel>
+
+@{
+    ViewData["Title"] = "Bookings";
+}
+
+<style>
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+    }
+    .modern-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        background: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    .toolbar-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1.5rem;
+        background: #fff;
+        border-bottom: 1px solid #eee;
+    }
+    .table-container {
+        padding: 0;
+    }
+    .table thead th {
+        background: #f8f9fa;
+        color: #495057;
+        font-weight: 600;
+        border-bottom: 2px solid #e9ecef;
+        padding: 1rem;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+    .table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        color: #212529;
+        border-bottom: 1px solid #f1f3f5;
+    }
+    .table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    .table tbody tr:hover {
+        background-color: #f8f9fa;
+        transform: scale(1.001);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+    .status-badge {
+        padding: 0.35em 0.8em;
+        border-radius: 50rem;
+        font-size: 0.75em;
+        font-weight: 600;
+    }
+    .status-active {
+        background-color: #d1e7dd;
+        color: #0f5132;
+    }
+    .status-cancelled {
+        background-color: #e2e3e5;
+        color: #41464b;
+    }
+    .status-completed {
+        background-color: #cfe2ff;
+        color: #084298;
+    }
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        color: #6c757d;
+        transition: all 0.2s;
+        text-decoration: none;
+        border: none;
+        background: none;
+        padding: 0;
+    }
+    .action-btn:hover {
+        background-color: #e9ecef;
+        color: var(--primary-color);
+    }
+    .action-btn.cancel:hover {
+        background-color: #fee2e2;
+        color: #dc3545;
+    }
+</style>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2 page-header mb-0">Manage Bookings</h1>
+            <p class="text-muted small mb-0">Overview and management of room reservations</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Book New Room
+        </a>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="modern-card">
+        <!-- Toolbar -->
+        <div class="toolbar-container">
+            <div class="btn-group">
+                <a asp-action="Index" class="btn btn-outline-secondary active">All Bookings</a>
+                <a asp-action="Stats" class="btn btn-outline-info">
+                    <i class="fas fa-chart-bar me-1"></i>View Stats
+                </a>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive table-container">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">Room</th>
+                        <th>Guest</th>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                        <tr>
+                            <td class="ps-4 fw-bold text-primary">
+                                <i class="fas fa-door-open me-2"></i>#@Html.DisplayFor(modelItem => item.RoomNumber)
+                            </td>
+                            <td>
+                                <i class="fas fa-user me-2 text-muted"></i>@Html.DisplayFor(modelItem => item.GuestName)
+                            </td>
+                            <td>
+                                <i class="fas fa-calendar-check me-1 text-muted"></i>
+                                @item.CheckInDate.ToString("MMM dd, yyyy")
+                            </td>
+                            <td>
+                                <i class="fas fa-calendar-times me-1 text-muted"></i>
+                                @item.CheckOutDate.ToString("MMM dd, yyyy")
+                            </td>
+                            <td class="fw-bold">
+                                @item.TotalAmount.ToString("C")
+                            </td>
+                            <td>
+                                @if (item.Status == "Cancelled")
+                                {
+                                    <span class="status-badge status-cancelled">
+                                        <i class="fas fa-ban me-1"></i>Cancelled
+                                    </span>
+                                }
+                                else if (item.Status == "Completed")
+                                {
+                                    <span class="status-badge status-completed">
+                                        <i class="fas fa-check-circle me-1"></i>Completed
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge status-active">
+                                        <i class="fas fa-check-circle me-1"></i>Active
+                                    </span>
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                @if (!item.IsCancelled && item.Status == "Active")
+                                {
+                                    <button type="button" class="action-btn cancel" data-bs-toggle="modal" data-bs-target="#cancelModal" data-booking-id="@item.BookingId" title="Cancel Booking">
+                                        <i class="fas fa-times-circle"></i>
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Confirmation Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModalLabel">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>Confirm Cancellation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">Are you sure you want to cancel this booking? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>No, Keep it
+                </button>
+                <form id="cancelForm" method="post" asp-action="Cancel" style="display: inline;">
+                    <input type="hidden" name="id" id="cancelBookingId" />
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-ban me-1"></i>Yes, Cancel
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var cancelModal = document.getElementById('cancelModal');
+        cancelModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var bookingId = button.getAttribute('data-booking-id');
+            var input = cancelModal.querySelector('#cancelBookingId');
+            input.value = bookingId;
+            var form = cancelModal.querySelector('#cancelForm');
+            form.action = '/Bookings/Cancel/' + bookingId;
+        })
+    </script>
+}

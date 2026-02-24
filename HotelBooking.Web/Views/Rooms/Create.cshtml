@@ -1,0 +1,135 @@
+@model HotelBooking.Web.ViewModels.RoomCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Room";
+}
+
+<style>
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+    }
+    .modern-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        background: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    .card-header-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    .card-body-custom {
+        padding: 2rem;
+    }
+    .form-label-custom {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+    .form-control-custom {
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+    .form-control-custom:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    .btn-custom-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .btn-custom-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+    .btn-custom-secondary {
+        background: #6c757d;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+    .btn-custom-secondary:hover {
+        background: #5a6268;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+    }
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+</style>
+
+<h1 class="page-header">Create New Room</h1>
+
+<div class="modern-card">
+    <div class="card-header-custom">
+        <i class="fas fa-door-open me-2"></i> Room Information
+    </div>
+    <div class="card-body-custom">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+            
+            <div class="mb-3">
+                <label asp-for="RoomNumber" class="form-label-custom"></label>
+                <input asp-for="RoomNumber" class="form-control form-control-custom" placeholder="Enter room number (e.g., 101)" />
+                <span asp-validation-for="RoomNumber" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="RoomType" class="form-label-custom"></label>
+                <select asp-for="RoomType" class="form-control form-control-custom">
+                    <option value="">-- Select Room Type --</option>
+                    <option value="Single">Single</option>
+                    <option value="Double">Double</option>
+                    <option value="Suite">Suite</option>
+                    <option value="Deluxe">Deluxe</option>
+                </select>
+                <span asp-validation-for="RoomType" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PricePerNight" class="form-label-custom"></label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input asp-for="PricePerNight" class="form-control form-control-custom" placeholder="0.00" type="number" step="0.01" />
+                </div>
+                <span asp-validation-for="PricePerNight" class="text-danger"></span>
+            </div>
+
+            <div class="action-buttons">
+                <button type="submit" class="btn btn-custom-primary">
+                    <i class="fas fa-save me-2"></i> Create Room
+                </button>
+                <a asp-action="Index" class="btn-custom-secondary">
+                    <i class="fas fa-arrow-left me-2"></i> Back to List
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

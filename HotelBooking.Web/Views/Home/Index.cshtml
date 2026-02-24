@@ -1,0 +1,103 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    .home-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 60vh; /* Vertically center content */
+    }
+    .compact-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: none;
+        border-radius: 12px;
+        background: white;
+    }
+    .compact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        background: #f8f9fa;
+        transition: background-color 0.3s;
+    }
+    .compact-card:hover .icon-circle {
+        background: #e9ecef;
+    }
+    .dashboard-title {
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+    }
+    .card-actions {
+        margin-top: 1rem;
+    }
+</style>
+
+<div class="home-container">
+    <div class="text-center mb-4">
+        <h1 class="h2 dashboard-title">Hotel Room Booking Management System</h1>
+        <p class="text-muted small">Overview & Quick Actions</p>
+    </div>
+
+    <div class="row g-3 justify-content-center">
+        <!-- Manage Rooms -->
+        <div class="col-md-3">
+            <div class="card h-100 compact-card shadow-sm text-center">
+                <div class="card-body p-4">
+                    <div class="icon-circle">
+                        <i class="fas fa-bed fa-2x text-primary"></i>
+                    </div>
+                    <h6 class="card-title fw-bold">Rooms</h6>
+                    <p class="card-text small text-muted mb-3">Inventory management</p>
+                    <a asp-controller="Rooms" asp-action="Index" class="btn btn-outline-primary btn-sm w-100 stretched-link">
+                        Manage Rooms
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Guests -->
+        <div class="col-md-3">
+            <div class="card h-100 compact-card shadow-sm text-center">
+                <div class="card-body p-4">
+                    <div class="icon-circle">
+                        <i class="fas fa-users fa-2x text-success"></i>
+                    </div>
+                    <h6 class="card-title fw-bold">Guests</h6>
+                    <p class="card-text small text-muted mb-3">Profiles & History</p>
+                    <a asp-controller="Guests" asp-action="Index" class="btn btn-outline-success btn-sm w-100 stretched-link">
+                        Manage Guests
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Book Room -->
+        <div class="col-md-3">
+            <div class="card h-100 compact-card shadow-sm text-center">
+                <div class="card-body p-4">
+                    <div class="icon-circle">
+                        <i class="fas fa-calendar-check fa-2x text-warning"></i>
+                    </div>
+                    <h6 class="card-title fw-bold">Bookings</h6>
+                    <p class="card-text small text-muted mb-3">Reservations & Billing</p>
+                    <a asp-controller="Bookings" asp-action="Index" class="btn btn-outline-warning btn-sm w-100 stretched-link">
+                        Manage Bookings
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

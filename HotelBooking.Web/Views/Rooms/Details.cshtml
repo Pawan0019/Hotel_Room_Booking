@@ -1,0 +1,164 @@
+@model HotelBooking.Web.ViewModels.RoomListViewModel
+
+@{
+    ViewData["Title"] = "Room Details";
+}
+
+<style>
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+    }
+    .modern-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        background: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    .card-header-custom {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        padding: 1.5rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    .card-body-custom {
+        padding: 2rem;
+    }
+    .detail-row {
+        display: flex;
+        padding: 1rem 0;
+        border-bottom: 1px solid #f1f3f5;
+    }
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+    .detail-label {
+        font-weight: 600;
+        color: #495057;
+        width: 200px;
+        flex-shrink: 0;
+    }
+    .detail-value {
+        color: #212529;
+        flex-grow: 1;
+    }
+    .status-badge {
+        padding: 0.35em 0.8em;
+        border-radius: 50rem;
+        font-size: 0.85em;
+        font-weight: 600;
+    }
+    .status-available {
+        background-color: #d1e7dd;
+        color: #0f5132;
+    }
+    .status-unavailable {
+        background-color: #f8d7da;
+        color: #842029;
+    }
+    .btn-custom-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+    .btn-custom-primary:hover {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+    }
+    .btn-custom-secondary {
+        background: #6c757d;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+    .btn-custom-secondary:hover {
+        background: #5a6268;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+    }
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+</style>
+
+<h1 class="page-header">Room Details</h1>
+
+<div class="modern-card">
+    <div class="card-header-custom">
+        <i class="fas fa-info-circle me-2"></i> Room Information
+    </div>
+    <div class="card-body-custom">
+        <div class="detail-row">
+            <div class="detail-label">
+                <i class="fas fa-hashtag me-2"></i> @Html.DisplayNameFor(model => model.RoomNumber)
+            </div>
+            <div class="detail-value">
+                <strong>@Html.DisplayFor(model => model.RoomNumber)</strong>
+            </div>
+        </div>
+        
+        <div class="detail-row">
+            <div class="detail-label">
+                <i class="fas fa-bed me-2"></i> @Html.DisplayNameFor(model => model.RoomType)
+            </div>
+            <div class="detail-value">
+                @Html.DisplayFor(model => model.RoomType)
+            </div>
+        </div>
+        
+        <div class="detail-row">
+            <div class="detail-label">
+                <i class="fas fa-dollar-sign me-2"></i> @Html.DisplayNameFor(model => model.PricePerNight)
+            </div>
+            <div class="detail-value">
+                $@Html.DisplayFor(model => model.PricePerNight) / night
+            </div>
+        </div>
+        
+        <div class="detail-row">
+            <div class="detail-label">
+                <i class="fas fa-check-circle me-2"></i> @Html.DisplayNameFor(model => model.IsAvailable)
+            </div>
+            <div class="detail-value">
+                @if (Model?.IsAvailable == true)
+                {
+                    <span class="status-badge status-available">✓ Available</span>
+                }
+                else
+                {
+                    <span class="status-badge status-unavailable">✗ Unavailable</span>
+                }
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a asp-action="Edit" asp-route-id="@Model?.RoomId" class="btn-custom-primary">
+                <i class="fas fa-edit me-2"></i> Edit Room
+            </a>
+            <a asp-action="Index" class="btn-custom-secondary">
+                <i class="fas fa-arrow-left me-2"></i> Back to List
+            </a>
+        </div>
+    </div>
+</div>

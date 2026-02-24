@@ -1,0 +1,25 @@
+/* Rooms page styles */
+.room-card {
+    transition: transform 0.2s;
+}
+
+.room-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.room-status-available {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.room-status-booked {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.price-tag {
+    font-size: 1.25rem;
+    color: #007bff;
+    font-weight: bold;
+}

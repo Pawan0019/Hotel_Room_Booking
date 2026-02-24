@@ -1,0 +1,148 @@
+@using HotelBooking.Web.Models
+@model IEnumerable<HotelBooking.Web.ViewModels.BookingStatsViewModel>
+
+@{
+    ViewData["Title"] = "Booking Statistics";
+}
+
+<style>
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+    }
+    .modern-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        background: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    .card-header-custom {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        color: white;
+        padding: 1.5rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    .card-body-custom {
+        padding: 2rem;
+    }
+    .stats-highlight {
+        background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+        border-left: 4px solid #00acc1;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border-radius: 8px;
+    }
+    .stats-highlight h4 {
+        color: #006064;
+        margin: 0;
+        font-weight: 700;
+    }
+    .stats-highlight .value {
+        font-size: 1.5rem;
+        color: #00838f;
+        font-weight: 800;
+    }
+    .guest-card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+    }
+    .guest-card-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+    }
+    .guest-card-body {
+        padding: 0;
+    }
+    .booking-item {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #f1f3f5;
+        transition: background 0.2s;
+    }
+    .booking-item:last-child {
+        border-bottom: none;
+    }
+    .booking-item:hover {
+        background: #f8f9fa;
+    }
+    .btn-custom-secondary {
+        background: #6c757d;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+    .btn-custom-secondary:hover {
+        background: #5a6268;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+    }
+</style>
+
+<h1 class="page-header">Booking Statistics</h1>
+
+<div class="modern-card">
+    <div class="card-header-custom">
+        <i class="fas fa-chart-bar me-2"></i> Analytics Overview
+    </div>
+    <div class="card-body-custom">
+        <div class="stats-highlight">
+            <h4><i class="fas fa-trophy me-2"></i> Most Booked Room Type</h4>
+            <div class="value">@ViewBag.MostBookedRoomType</div>
+        </div>
+
+        <h4 class="mb-3"><i class="fas fa-users me-2"></i> Bookings Grouped by Guest</h4>
+
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var group in Model)
+            {
+                <div class="guest-card">
+                    <div class="guest-card-header">
+                        <i class="fas fa-user me-2"></i> @group.GuestName 
+                        <span class="badge bg-light text-dark ms-2">@group.BookingCount Booking@(group.BookingCount > 1 ? "s" : "")</span>
+                    </div>
+                    <div class="guest-card-body">
+                        @foreach (var booking in group.Bookings)
+                        {
+                            <div class="booking-item">
+                                <i class="fas fa-door-open me-2 text-primary"></i>
+                                <strong>Room @booking.RoomNumber</strong> 
+                                <span class="text-muted">•</span>
+                                <i class="fas fa-calendar-alt me-1 ms-2"></i>
+                                @booking.CheckInDate.ToShortDateString() to @booking.CheckOutDate.ToShortDateString()
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i> No booking data available.
+            </div>
+        }
+
+        <div class="mt-4">
+            <a asp-action="Index" class="btn-custom-secondary">
+                <i class="fas fa-arrow-left me-2"></i> Back to Bookings
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+/* Bookings page styles */
+.booking-summary {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #dee2e6;
+}
+
+.total-amount-display {
+    font-size: 2rem;
+    color: #28a745;
+    font-weight: bold;
+}
+
+.booking-actions {
+    margin-top: 1rem;
+}

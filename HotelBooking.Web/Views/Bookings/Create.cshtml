@@ -1,0 +1,218 @@
+@model HotelBooking.Web.ViewModels.BookingCreateViewModel
+
+@{
+    ViewData["Title"] = "Book Room";
+}
+
+<style>
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+    }
+    .modern-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        background: white;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    .card-header-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    .card-body-custom {
+        padding: 2rem;
+    }
+    .form-label-custom {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+    .form-control-custom {
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+    }
+    .form-control-custom:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    .total-display {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 8px;
+        padding: 1rem;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #667eea;
+        text-align: center;
+    }
+    .btn-custom-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .btn-custom-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+    .btn-custom-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    .btn-custom-secondary {
+        background: #6c757d;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+    .btn-custom-secondary:hover {
+        background: #5a6268;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+    }
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+</style>
+
+<h1 class="page-header">Book a Room</h1>
+
+<div class="modern-card">
+    <div class="card-header-custom">
+        <i class="fas fa-calendar-check me-2"></i> Booking Information
+    </div>
+    <div class="card-body-custom">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+            
+            <div class="mb-3">
+                <label asp-for="RoomId" class="form-label-custom"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-door-open"></i></span>
+                    <select asp-for="RoomId" class="form-control form-control-custom" asp-items="Model.RoomDropdownList">
+                        <option value="">-- Select Room --</option>
+                    </select>
+                </div>
+                <span asp-validation-for="RoomId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="GuestId" class="form-label-custom"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <select asp-for="GuestId" class="form-control form-control-custom" asp-items="Model.GuestDropdownList">
+                        <option value="">-- Select Guest --</option>
+                    </select>
+                </div>
+                <span asp-validation-for="GuestId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CheckInDate" class="form-label-custom"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                    <input asp-for="CheckInDate" class="form-control form-control-custom" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                </div>
+                <span asp-validation-for="CheckInDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CheckOutDate" class="form-label-custom"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                    <input asp-for="CheckOutDate" class="form-control form-control-custom" type="date" min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" />
+                </div>
+                <span asp-validation-for="CheckOutDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label-custom">Estimated Total</label>
+                <div id="estimatedTotal" class="total-display">
+                    <i class="fas fa-calculator me-2"></i> Select dates to calculate
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button type="submit" class="btn btn-custom-primary" id="btnSubmit">
+                    <i class="fas fa-check me-2"></i> Confirm Booking
+                </button>
+                <a asp-action="Index" class="btn-custom-secondary">
+                    <i class="fas fa-arrow-left me-2"></i> Back to List
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        var roomPrices = @Html.Raw(Json.Serialize(ViewBag.RoomPrices));
+
+        function calculateTotal() {
+            var roomId = document.getElementById("RoomId").value;
+            var checkIn = document.getElementById("CheckInDate").value;
+            var checkOut = document.getElementById("CheckOutDate").value;
+            var btnSubmit = document.getElementById("btnSubmit");
+            var totalDisplay = document.getElementById("estimatedTotal");
+
+            if (roomId && checkIn && checkOut) {
+                var price = roomPrices[roomId];
+                var date1 = new Date(checkIn);
+                var date2 = new Date(checkOut);
+                
+                date1.setHours(0,0,0,0);
+                date2.setHours(0,0,0,0);
+
+                var timeDiff = date2.getTime() - date1.getTime();
+                var daysDiff = timeDiff / (1000 * 3600 * 24);
+
+                if (daysDiff > 0) {
+                    var total = daysDiff * price;
+                    totalDisplay.innerHTML = '<i me-2"></i>' + total.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) + ' <small>(' + daysDiff + ' night' + (daysDiff > 1 ? 's' : '') + ')</small>';
+                    btnSubmit.disabled = false;
+                } else {
+                    totalDisplay.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i> Invalid Dates';
+                    btnSubmit.disabled = true;
+                }
+            } else {
+                totalDisplay.innerHTML = '<i class="fas fa-calculator me-2"></i> Select dates to calculate';
+                btnSubmit.disabled = !roomId || !checkIn || !checkOut;
+            }
+        }
+
+        document.getElementById("RoomId").addEventListener("change", calculateTotal);
+        document.getElementById("CheckInDate").addEventListener("change", calculateTotal);
+        document.getElementById("CheckOutDate").addEventListener("change", calculateTotal);
+        
+        document.getElementById("CheckInDate").addEventListener("change", function() {
+            var checkIn = this.value;
+            if (checkIn) {
+                var d = new Date(checkIn);
+                d.setDate(d.getDate() + 1);
+                var minOut = d.toISOString().split('T')[0];
+                document.getElementById("CheckOutDate").setAttribute("min", minOut);
+            }
+        });
+    </script>
+}
